@@ -1,0 +1,7 @@
+CREATE TABLE cart (
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  image TEXT NOT NULL,
+  price DECIMAL(10, 2) NOT NULL,
+  amount INT NOT NULL
+);

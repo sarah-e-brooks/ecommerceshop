@@ -15,6 +15,17 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+const path = require('path');
+
+// Serve static files from the React app
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'client/build')));
+
+// Handle React routing, return index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+});
+
 // Save cart to the database
 app.post('/api/cart', async (req, res) => {
   const { cart } = req.body;

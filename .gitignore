@@ -1,0 +1,28 @@
+# Ignore actual environment variables but keep the example file
+.env
+!.env.example  # Allow .env.example to be tracked
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+logs/*.log
+debug.log
+error.log
+
+# Build files
+dist/
+build/
+
+# Editor/IDE files
+.vscode/
+.idea/
+.DS_Store
+
+# Dependency locks (optional)
+package-lock.json
+yarn.lock

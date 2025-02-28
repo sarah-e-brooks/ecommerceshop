@@ -1,3 +1,4 @@
+// @ts-nocheck
 // import React, { createContext, useState, useEffect, Children } from 'react';
 // import { use } from 'react';
 // import { IoIosColorPalette } from 'react-icons/io';
@@ -155,6 +156,12 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const CartContext = createContext();
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+console.log( {
+  API_URL
+} );
+
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [itemAmount, setItemAmount] = useState(0);
@@ -164,7 +171,7 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     const loadCart = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/cart');
+        const response = await fetch( API_URL );
         const data = await response.json();
         setCart(data);
       } catch (error) {
@@ -178,7 +185,7 @@ const CartProvider = ({ children }) => {
   useEffect(() => {
     const saveCart = async () => {
       try {
-        await fetch('http://localhost:5000/api/cart', {
+        await fetch( API_URL, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ cart }),

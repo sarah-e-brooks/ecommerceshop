@@ -1,5 +1,10 @@
 import React, { useState, createContext } from 'react';
-export const SidebarContext = createContext();
+export const SidebarContext = createContext({
+  isOpen: false,
+  // eslint-disable-next-line no-unused-vars
+  setIsOpen: (/** @type {boolean} */ value) => {},
+  handleClose: () => {}
+});
 
 const SidebarProvider = ({ children }) => {
   // sidebar state

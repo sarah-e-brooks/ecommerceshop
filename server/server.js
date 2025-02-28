@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
-const { Pool } = require('pg');
+const { Pool } = require( 'pg' );
+const fs = require( 'fs' );
+const path = require( 'path' );
 require('dotenv').config();
 
 const app = express();
@@ -12,19 +14,29 @@ const pool = new Pool({
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
+  port: process.env.DB_PORT ? +(process.env.DB_PORT) : 5432 ,
+} );
 
-const path = require('path');
+const executeSqlFile = async ( filePath ) =>
+{
+  try
+  {
+    // Read the SQL file
+    const sql = fs.readFileSync( filePath, 'utf8' );
 
-// Serve static files from the React app
-const __dirname = path.resolve();
-app.use(express.static(path.join(__dirname, 'client/build')));
+    // Execute the SQL commands
+    await pool.query( sql );
 
-// Handle React routing, return index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
-});
+    console.log( 'Database schema has been created successfully.' );
+  } catch ( err )
+  {
+    console.error( 'Error executing SQL file:', err );
+  } finally
+  {
+    // Close the pool
+    await pool.end();
+  }
+};
 
 // Save cart to the database
 app.post('/api/cart', async (req, res) => {
@@ -58,6 +70,23 @@ app.get('/api/cart', async (req, res) => {
 
 // Start the server
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+
+const start = async () => {
+  try
+  {
+    // connect to DB
+    await pool.connect();
+    const sqlFilePath = path.join( __dirname, 'cart.sql' );
+    executeSqlFile( sqlFilePath );
+    console.log( 'Connected to the database' );
+    app.listen( PORT, () =>
+    {
+      console.log( `Server running on http://localhost:${ PORT }` );
+    } );
+  } catch (error) {
+    console.error( 'Failed to connect to the database:', error );
+    console.log( "Did not start server...." );
+  }
+};
+
+start();

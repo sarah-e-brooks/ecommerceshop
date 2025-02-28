@@ -6,6 +6,8 @@ import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import Footer from './components/Footer';
 
+import './index.css';
+
 const App = () => {
   return <div className='overflow-hidden'>
     <Router>

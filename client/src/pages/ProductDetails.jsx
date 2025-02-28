@@ -11,7 +11,7 @@ const ProductDetails = () => {
 
   // get the single product based on the id
   const product = products.find(item => {
-    return item.id === parseInt(id);
+    return item.id === parseInt(id || '0');
   });
 
   // if product is not found
